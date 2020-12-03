@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -118,7 +119,10 @@ func fetchDetailsFromExternalService(isbn string, id int, headers http.Header) *
 		proto = "http"
 	}
 	uri := proto + "://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn
-	c := &http.Client{Timeout: 5 * time.Second}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	c := &http.Client{Transport: tr, Timeout: 5 * time.Second}
 	res, err := c.Get(uri)
 	if err != nil {
 		fmt.Println(err)
