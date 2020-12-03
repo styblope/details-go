@@ -8,7 +8,7 @@ build:
 build-static:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s" -o details-go
 
-run: build-podman
+run:
 	go run details.go 9080
 
 clean: clean-podman
