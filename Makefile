@@ -17,6 +17,9 @@ clean: clean-podman
 build-podman: build-static
 	podman build --squash-all -t examples-bookinfo-details-go-v1 .
 
+build-podman-with-builder:
+	podman build --squash-all -t examples-bookinfo-details-go-v1 -f Dockerfile.build .
+
 run-podman: build-podman
 	podman run --rm --name details-go -p 9080:9080/tcp examples-bookinfo-details-go-v1
 
