@@ -11,16 +11,15 @@ build-static:
 run: build-podman
 	go run details.go 9080
 
-clean:
+clean: clean-podman
 	-rm details-go
 
 build-podman: build-static
-	podman build --squash-all -t details-go .
+	podman build --squash-all -t examples-bookinfo-details-go-v1 .
 
 run-podman: build-podman
-	podman run --rm --name details-go -p 9080:9080/tcp details-go
+	podman run --rm --name details-go -p 9080:9080/tcp examples-bookinfo-details-go-v1
 
 clean-podman:
-	-podman rmi details-go
+	-podman rmi examples-bookinfo-details-go-v1
 
-clean-all: clean-podman clean
