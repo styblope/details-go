@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -198,7 +200,13 @@ func main() {
 
 	port := os.Args[1]
 
-	//TODO: signal trap
+	// Catch SIGTERM
+	go func() {
+		sig := make(chan os.Signal, 1)
+		signal.Notify(sig, syscall.SIGTERM)
+		<-sig
+		os.Exit(0)
+	}()
 
 	http.HandleFunc("/details/", details)
 	http.HandleFunc("/details", details)
