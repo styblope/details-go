@@ -60,7 +60,7 @@ var incomingHeaders = []string{
 type Details struct {
 	Id        int    `json:"id"`
 	Author    string `json:"author"`
-	Year      string `json:"year"`
+	Year      int    `json:"year"`
 	Type      string `json:"type"`
 	Pages     int    `json:"pages"`
 	Publisher string `json:"publisher"`
@@ -82,6 +82,7 @@ func details(w http.ResponseWriter, req *http.Request) {
 	pathParts := strings.Split(req.URL.Path, "/")
 	id, err := strconv.Atoi(pathParts[len(pathParts)-1])
 	headers := getForwardHeaders(req)
+	w.Header().Add("Content-Type", "application/json")
 	var data []byte
 	if err != nil {
 		data, _ = json.Marshal(&struct {
@@ -91,7 +92,6 @@ func details(w http.ResponseWriter, req *http.Request) {
 	} else {
 		data, _ = json.Marshal(getBookDetails(id, headers))
 	}
-	w.Header().Add("Content-Type", "application/json")
 	fmt.Fprint(w, string(data))
 }
 
@@ -103,7 +103,7 @@ func getBookDetails(id int, headers http.Header) *Details {
 	return &Details{
 		Id:        id,
 		Author:    "William Shakespeare",
-		Year:      "1595",
+		Year:      1595,
 		Type:      "paperback",
 		Pages:     200,
 		Publisher: "PublisherA",
@@ -165,11 +165,12 @@ func fetchDetailsFromExternalService(isbn string, id int, headers http.Header) *
 	for _, item := range book.IndustryIdentifiers {
 		isbnIdentifier[item.Type] = item.Identifier
 	}
+	year, _ := strconv.Atoi(book.PublishedDate)
 
 	return &Details{
 		Id:        id,
 		Author:    book.Authors[0],
-		Year:      book.PublishedDate,
+		Year:      year,
 		Type:      printType,
 		Pages:     book.PageCount,
 		Publisher: book.Publisher,
