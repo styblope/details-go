@@ -22,3 +22,16 @@ run-podman: build-podman
 clean-podman:
 	-podman rmi examples-bookinfo-details-go-v1
 
+
+build-docker: build
+	docker build --squash-all -t examples-bookinfo-details-go-v1 .
+
+build-docker-with-builder:
+	docker build --squash-all -t examples-bookinfo-details-go-v1 -f Dockerfile.builder .
+
+run-docker: build-docker
+	docker run --rm --name details-go -p 9080:9080/tcp examples-bookinfo-details-go-v1
+
+clean-docker:
+	-docker rmi examples-bookinfo-details-go-v1
+
