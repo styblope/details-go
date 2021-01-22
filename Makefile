@@ -7,7 +7,7 @@ build:
 run:
 	go run details.go 9080
 
-clean: clean-podman
+clean: clean-podman clean-docker
 	-rm details-go
 
 build-podman: build
