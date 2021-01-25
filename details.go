@@ -124,8 +124,8 @@ func fetchDetailsFromExternalService(isbn string, id int, headers http.Header) *
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	c := &http.Client{Transport: tr, Timeout: 5 * time.Second}
-	res, err := c.Get(uri)
+	client := &http.Client{Transport: tr, Timeout: 5 * time.Second}
+	res, err := client.Get(uri)
 	if err != nil {
 		fmt.Println(err)
 		return &Details{}
