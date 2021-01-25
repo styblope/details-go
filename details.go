@@ -121,10 +121,11 @@ func fetchDetailsFromExternalService(isbn string, id int, headers http.Header) *
 		proto = "http"
 	}
 	uri := proto + "://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn
-	client := &http.Client{Transport: &http.Transport{
+	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}, Timeout: 5 * time.Second}
-	res, err := client.Get(uri)
+	}
+	c := &http.Client{Transport: tr, Timeout: 5 * time.Second}
+	res, err := c.Get(uri)
 	if err != nil {
 		fmt.Println(err)
 		return &Details{}
